@@ -13,3 +13,4 @@
 - Data modules are config-driven in `src/lib/modules.ts` and rendered by the generic `CrudPage` via `/m/$modul`; add a module by adding config + table, not a new page.
 - Data access uses the browser Supabase client with per-user RLS (`user_id = auth.uid()`); no server functions needed for CRUD.
 - Printing uses `window.print()` with `.no-print`/`.print-only` classes and `PrintKop`/`PrintTtd` components.
+- Roles live in `public.user_roles` (read-only to clients, checked via `has_role`); admin-only account actions run in `src/lib/users.functions.ts` server functions that verify the admin role before using the service-role client.

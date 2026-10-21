@@ -11,9 +11,11 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AturSandiRouteImport } from './routes/atur-sandi'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedLaporanRouteImport } from './routes/_authenticated/laporan'
+import { Route as AuthenticatedPenggunaRouteImport } from './routes/_authenticated/pengguna'
 import { Route as AuthenticatedProfilRouteImport } from './routes/_authenticated/profil'
 import { Route as AuthenticatedMModulRouteImport } from './routes/_authenticated/m.$modul'
 
@@ -24,6 +26,11 @@ const IndexRoute = IndexRouteImport.update({
 } as any)
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AturSandiRoute = AturSandiRouteImport.update({
+  id: '/atur-sandi',
+  path: '/atur-sandi',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -41,6 +48,11 @@ const AuthenticatedLaporanRoute = AuthenticatedLaporanRouteImport.update({
   path: '/laporan',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedPenggunaRoute = AuthenticatedPenggunaRouteImport.update({
+  id: '/pengguna',
+  path: '/pengguna',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedProfilRoute = AuthenticatedProfilRouteImport.update({
   id: '/profil',
   path: '/profil',
@@ -54,17 +66,21 @@ const AuthenticatedMModulRoute = AuthenticatedMModulRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/atur-sandi': typeof AturSandiRoute
   '/auth': typeof AuthRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/laporan': typeof AuthenticatedLaporanRoute
+  '/pengguna': typeof AuthenticatedPenggunaRoute
   '/profil': typeof AuthenticatedProfilRoute
   '/m/$modul': typeof AuthenticatedMModulRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/atur-sandi': typeof AturSandiRoute
   '/auth': typeof AuthRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/laporan': typeof AuthenticatedLaporanRoute
+  '/pengguna': typeof AuthenticatedPenggunaRoute
   '/profil': typeof AuthenticatedProfilRoute
   '/m/$modul': typeof AuthenticatedMModulRoute
 }
@@ -72,24 +88,44 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/atur-sandi': typeof AturSandiRoute
   '/auth': typeof AuthRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/laporan': typeof AuthenticatedLaporanRoute
+  '/_authenticated/pengguna': typeof AuthenticatedPenggunaRoute
   '/_authenticated/profil': typeof AuthenticatedProfilRoute
   '/_authenticated/m/$modul': typeof AuthenticatedMModulRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/dashboard' | '/laporan' | '/profil' | '/m/$modul'
+  fullPaths:
+    | '/'
+    | '/atur-sandi'
+    | '/auth'
+    | '/dashboard'
+    | '/laporan'
+    | '/pengguna'
+    | '/profil'
+    | '/m/$modul'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/dashboard' | '/laporan' | '/profil' | '/m/$modul'
+  to:
+    | '/'
+    | '/atur-sandi'
+    | '/auth'
+    | '/dashboard'
+    | '/laporan'
+    | '/pengguna'
+    | '/profil'
+    | '/m/$modul'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
+    | '/atur-sandi'
     | '/auth'
     | '/_authenticated/dashboard'
     | '/_authenticated/laporan'
+    | '/_authenticated/pengguna'
     | '/_authenticated/profil'
     | '/_authenticated/m/$modul'
   fileRoutesById: FileRoutesById
@@ -97,6 +133,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AturSandiRoute: typeof AturSandiRoute
   AuthRoute: typeof AuthRoute
 }
 
@@ -114,6 +151,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/atur-sandi': {
+      id: '/atur-sandi'
+      path: '/atur-sandi'
+      fullPath: '/atur-sandi'
+      preLoaderRoute: typeof AturSandiRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -137,6 +181,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedLaporanRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/pengguna': {
+      id: '/_authenticated/pengguna'
+      path: '/pengguna'
+      fullPath: '/pengguna'
+      preLoaderRoute: typeof AuthenticatedPenggunaRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/profil': {
       id: '/_authenticated/profil'
       path: '/profil'
@@ -157,6 +208,7 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedLaporanRoute: typeof AuthenticatedLaporanRoute
+  AuthenticatedPenggunaRoute: typeof AuthenticatedPenggunaRoute
   AuthenticatedProfilRoute: typeof AuthenticatedProfilRoute
   AuthenticatedMModulRoute: typeof AuthenticatedMModulRoute
 }
@@ -164,6 +216,7 @@ interface AuthenticatedRouteRouteChildren {
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedLaporanRoute: AuthenticatedLaporanRoute,
+  AuthenticatedPenggunaRoute: AuthenticatedPenggunaRoute,
   AuthenticatedProfilRoute: AuthenticatedProfilRoute,
   AuthenticatedMModulRoute: AuthenticatedMModulRoute,
 }
@@ -174,6 +227,7 @@ const AuthenticatedRouteRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AturSandiRoute: AturSandiRoute,
   AuthRoute: AuthRoute,
 }
 export const routeTree = rootRouteImport
