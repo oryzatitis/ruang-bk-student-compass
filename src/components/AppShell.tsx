@@ -1,10 +1,10 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState, type ReactNode } from "react";
-import { LayoutDashboard, FileBarChart, UserCircle, LogOut, Menu, BookHeart } from "lucide-react";
+import { LayoutDashboard, FileBarChart, UserCircle, LogOut, Menu, BookHeart, Users } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { MODULES } from "@/lib/modules";
-import { profileQuery } from "@/lib/data";
+import { profileQuery, isAdminQuery } from "@/lib/data";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 
@@ -13,6 +13,7 @@ const linkCls =
 const activeCls = "bg-sidebar-primary text-sidebar-primary-foreground hover:bg-sidebar-primary hover:text-sidebar-primary-foreground";
 
 function NavLinks({ onNavigate }: { onNavigate?: (() => void) | undefined }) {
+  const { data: isAdmin } = useQuery(isAdminQuery);
   return (
     <nav className="flex flex-col gap-1">
       <Link to="/dashboard" className={linkCls} activeProps={{ className: activeCls }} onClick={onNavigate}>
@@ -38,6 +39,11 @@ function NavLinks({ onNavigate }: { onNavigate?: (() => void) | undefined }) {
       <Link to="/profil" className={linkCls} activeProps={{ className: activeCls }} onClick={onNavigate}>
         <UserCircle className="h-4 w-4" /> Profil Saya
       </Link>
+      {isAdmin && (
+        <Link to="/pengguna" className={linkCls} activeProps={{ className: activeCls }} onClick={onNavigate}>
+          <Users className="h-4 w-4" /> Kelola Pengguna
+        </Link>
+      )}
     </nav>
   );
 }

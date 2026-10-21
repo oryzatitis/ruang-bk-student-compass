@@ -37,3 +37,13 @@ export const moduleQuery = (m: ModuleDef) =>
 
 export const formatTanggal = (d?: string | null) =>
   d ? new Date(d + "T00:00:00").toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" }) : "-";
+
+export const isAdminQuery = queryOptions({
+  queryKey: ["is-admin"],
+  queryFn: async () => {
+    const { data: u } = await supabase.auth.getUser();
+    if (!u.user) return false;
+    const { data } = await supabase.rpc("has_role", { _user_id: u.user.id, _role: "admin" });
+    return data === true;
+  },
+});
