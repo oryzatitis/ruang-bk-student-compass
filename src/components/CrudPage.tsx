@@ -28,7 +28,7 @@ const selectCls =
 
 async function openFile(path: string) {
   const { data, error } = await supabase.storage.from("dokumen-bk").createSignedUrl(path, 300);
-  if (error || !data) return toast.error("Berkas tidak dapat dibuka");
+  if (error || !data) { toast.error("Berkas tidak dapat dibuka"); return; }
   window.open(data.signedUrl, "_blank");
 }
 

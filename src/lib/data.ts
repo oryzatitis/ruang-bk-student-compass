@@ -31,7 +31,7 @@ export const moduleQuery = (m: ModuleDef) =>
         .select(hasSiswa ? "*, siswa(nama,kelas)" : "*")
         .order(m.orderBy, { ascending: m.orderBy === "nama" });
       if (error) throw error;
-      return data as unknown as Record<string, any>[];
+      return data as unknown as any[];
     },
   });
 
