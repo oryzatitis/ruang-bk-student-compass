@@ -47,7 +47,7 @@ export interface ModuleDef {
 }
 
 const BIDANG = ["Pribadi", "Sosial", "Belajar", "Karier"];
-const KELAS = ["VII A", "VII B", "VII C", "VII D", "VIII A", "VIII B", "VIII C", "VIII D", "IX A", "IX B", "IX C", "IX D"];
+const KELAS = ["VII A", "VII B", "VII C", "VII D", "VII E", "VIII A", "VIII B", "VIII C", "VIII D", "VIII E", "IX A", "IX B", "IX C", "IX D", "IX E"];
 
 export const MODULES: ModuleDef[] = [
   {
