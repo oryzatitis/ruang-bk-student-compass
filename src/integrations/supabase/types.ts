@@ -14,7 +14,382 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      akpd: {
+        Row: {
+          bidang_prioritas: string | null
+          butir_masalah: string | null
+          catatan: string | null
+          created_at: string
+          id: string
+          siswa_id: string | null
+          tanggal: string
+          user_id: string
+        }
+        Insert: {
+          bidang_prioritas?: string | null
+          butir_masalah?: string | null
+          catatan?: string | null
+          created_at?: string
+          id?: string
+          siswa_id?: string | null
+          tanggal?: string
+          user_id?: string
+        }
+        Update: {
+          bidang_prioritas?: string | null
+          butir_masalah?: string | null
+          catatan?: string | null
+          created_at?: string
+          id?: string
+          siswa_id?: string | null
+          tanggal?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "akpd_siswa_id_fkey"
+            columns: ["siswa_id"]
+            isOneToOne: false
+            referencedRelation: "siswa"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      daftar_hadir: {
+        Row: {
+          created_at: string
+          id: string
+          kegiatan: string | null
+          keterangan: string | null
+          siswa_id: string | null
+          status: string | null
+          tanggal: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          kegiatan?: string | null
+          keterangan?: string | null
+          siswa_id?: string | null
+          status?: string | null
+          tanggal?: string
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          kegiatan?: string | null
+          keterangan?: string | null
+          siswa_id?: string | null
+          status?: string | null
+          tanggal?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "daftar_hadir_siswa_id_fkey"
+            columns: ["siswa_id"]
+            isOneToOne: false
+            referencedRelation: "siswa"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      dokumen: {
+        Row: {
+          created_at: string
+          file_path: string | null
+          id: string
+          judul: string
+          kategori: string | null
+          keterangan: string | null
+          tanggal: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          file_path?: string | null
+          id?: string
+          judul: string
+          kategori?: string | null
+          keterangan?: string | null
+          tanggal?: string
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          file_path?: string | null
+          id?: string
+          judul?: string
+          kategori?: string | null
+          keterangan?: string | null
+          tanggal?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      konseling_individu: {
+        Row: {
+          bidang: string | null
+          created_at: string
+          hasil: string | null
+          id: string
+          masalah: string | null
+          siswa_id: string | null
+          tanggal: string
+          tindakan: string | null
+          user_id: string
+        }
+        Insert: {
+          bidang?: string | null
+          created_at?: string
+          hasil?: string | null
+          id?: string
+          masalah?: string | null
+          siswa_id?: string | null
+          tanggal?: string
+          tindakan?: string | null
+          user_id?: string
+        }
+        Update: {
+          bidang?: string | null
+          created_at?: string
+          hasil?: string | null
+          id?: string
+          masalah?: string | null
+          siswa_id?: string | null
+          tanggal?: string
+          tindakan?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "konseling_individu_siswa_id_fkey"
+            columns: ["siswa_id"]
+            isOneToOne: false
+            referencedRelation: "siswa"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      konseling_kelompok: {
+        Row: {
+          anggota: string | null
+          bidang: string | null
+          created_at: string
+          hasil: string | null
+          id: string
+          tanggal: string
+          topik: string
+          user_id: string
+        }
+        Insert: {
+          anggota?: string | null
+          bidang?: string | null
+          created_at?: string
+          hasil?: string | null
+          id?: string
+          tanggal?: string
+          topik: string
+          user_id?: string
+        }
+        Update: {
+          anggota?: string | null
+          bidang?: string | null
+          created_at?: string
+          hasil?: string | null
+          id?: string
+          tanggal?: string
+          topik?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      kunjungan: {
+        Row: {
+          created_at: string
+          id: string
+          keperluan: string | null
+          siswa_id: string | null
+          tanggal: string
+          tindak_lanjut: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          keperluan?: string | null
+          siswa_id?: string | null
+          tanggal?: string
+          tindak_lanjut?: string | null
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          keperluan?: string | null
+          siswa_id?: string | null
+          tanggal?: string
+          tindak_lanjut?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "kunjungan_siswa_id_fkey"
+            columns: ["siswa_id"]
+            isOneToOne: false
+            referencedRelation: "siswa"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pelanggaran: {
+        Row: {
+          created_at: string
+          id: string
+          jenis: string | null
+          pembinaan: string | null
+          poin: number | null
+          siswa_id: string | null
+          status: string | null
+          tanggal: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          jenis?: string | null
+          pembinaan?: string | null
+          poin?: number | null
+          siswa_id?: string | null
+          status?: string | null
+          tanggal?: string
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          jenis?: string | null
+          pembinaan?: string | null
+          poin?: number | null
+          siswa_id?: string | null
+          status?: string | null
+          tanggal?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pelanggaran_siswa_id_fkey"
+            columns: ["siswa_id"]
+            isOneToOne: false
+            referencedRelation: "siswa"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          id: string
+          kelas_binaan: string | null
+          nama: string
+          nip: string | null
+        }
+        Insert: {
+          created_at?: string
+          id: string
+          kelas_binaan?: string | null
+          nama?: string
+          nip?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          kelas_binaan?: string | null
+          nama?: string
+          nip?: string | null
+        }
+        Relationships: []
+      }
+      program_bk: {
+        Row: {
+          bidang: string | null
+          created_at: string
+          id: string
+          jenis: string | null
+          judul: string
+          kelas: string | null
+          keterangan: string | null
+          tujuan: string | null
+          user_id: string
+          waktu: string | null
+        }
+        Insert: {
+          bidang?: string | null
+          created_at?: string
+          id?: string
+          jenis?: string | null
+          judul: string
+          kelas?: string | null
+          keterangan?: string | null
+          tujuan?: string | null
+          user_id?: string
+          waktu?: string | null
+        }
+        Update: {
+          bidang?: string | null
+          created_at?: string
+          id?: string
+          jenis?: string | null
+          judul?: string
+          kelas?: string | null
+          keterangan?: string | null
+          tujuan?: string | null
+          user_id?: string
+          waktu?: string | null
+        }
+        Relationships: []
+      }
+      siswa: {
+        Row: {
+          alamat: string | null
+          created_at: string
+          id: string
+          jenis_kelamin: string | null
+          kelas: string | null
+          nama: string
+          nama_ortu: string | null
+          nis: string | null
+          telepon: string | null
+          user_id: string
+        }
+        Insert: {
+          alamat?: string | null
+          created_at?: string
+          id?: string
+          jenis_kelamin?: string | null
+          kelas?: string | null
+          nama: string
+          nama_ortu?: string | null
+          nis?: string | null
+          telepon?: string | null
+          user_id?: string
+        }
+        Update: {
+          alamat?: string | null
+          created_at?: string
+          id?: string
+          jenis_kelamin?: string | null
+          kelas?: string | null
+          nama?: string
+          nama_ortu?: string | null
+          nis?: string | null
+          telepon?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
