@@ -38,12 +38,12 @@ function AturSandi() {
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (pw.length < 8) return toast.error("Kata sandi minimal 8 karakter");
-    if (pw !== pw2) return toast.error("Kata sandi tidak sama");
+    if (pw.length < 8) { toast.error("Kata sandi minimal 8 karakter"); return; }
+    if (pw !== pw2) { toast.error("Kata sandi tidak sama"); return; }
     setLoading(true);
     const { error } = await supabase.auth.updateUser({ password: pw });
     setLoading(false);
-    if (error) return toast.error("Gagal menyimpan kata sandi. Coba lagi.");
+    if (error) { toast.error("Gagal menyimpan kata sandi. Coba lagi."); return; }
     toast.success("Kata sandi tersimpan");
     navigate({ to: "/profil" });
   };
