@@ -8,3 +8,8 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+## Architecture rules
+- Data modules are config-driven in `src/lib/modules.ts` and rendered by the generic `CrudPage` via `/m/$modul`; add a module by adding config + table, not a new page.
+- Data access uses the browser Supabase client with per-user RLS (`user_id = auth.uid()`); no server functions needed for CRUD.
+- Printing uses `window.print()` with `.no-print`/`.print-only` classes and `PrintKop`/`PrintTtd` components.

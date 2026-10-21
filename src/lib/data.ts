@@ -1,0 +1,39 @@
+import { queryOptions } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import type { ModuleDef } from "./modules";
+
+export const profileQuery = queryOptions({
+  queryKey: ["profile"],
+  queryFn: async () => {
+    const { data: u } = await supabase.auth.getUser();
+    if (!u.user) return null;
+    const { data } = await supabase.from("profiles").select("*").eq("id", u.user.id).maybeSingle();
+    return { email: u.user.email ?? "", nama: data?.nama ?? "", nip: data?.nip ?? "", kelas_binaan: data?.kelas_binaan ?? "" };
+  },
+});
+
+export const siswaListQuery = queryOptions({
+  queryKey: ["siswa-list"],
+  queryFn: async () => {
+    const { data, error } = await supabase.from("siswa").select("id,nama,kelas,nis").order("nama");
+    if (error) throw error;
+    return data;
+  },
+});
+
+export const moduleQuery = (m: ModuleDef) =>
+  queryOptions({
+    queryKey: ["module", m.table],
+    queryFn: async () => {
+      const hasSiswa = m.fields.some((f) => f.type === "siswa");
+      const { data, error } = await supabase
+        .from(m.table)
+        .select(hasSiswa ? "*, siswa(nama,kelas)" : "*")
+        .order(m.orderBy, { ascending: m.orderBy === "nama" });
+      if (error) throw error;
+      return data as unknown as any[];
+    },
+  });
+
+export const formatTanggal = (d?: string | null) =>
+  d ? new Date(d + "T00:00:00").toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" }) : "-";
