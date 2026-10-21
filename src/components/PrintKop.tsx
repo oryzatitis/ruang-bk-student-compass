@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { profileQuery } from "@/lib/data";
 
-export function PrintKop({ title, subtitle }: { title: string; subtitle?: string }) {
+export function PrintKop({ title, subtitle }: { title: string; subtitle?: string | undefined }) {
   return (
     <div className="print-only mb-4 text-center">
       <div className="text-sm font-semibold">PEMERINTAH KABUPATEN SLEMAN — DINAS PENDIDIKAN</div>

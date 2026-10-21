@@ -27,16 +27,16 @@ function Profil() {
     e.preventDefault();
     const { data: u } = await supabase.auth.getUser();
     const { error } = await supabase.from("profiles").upsert({ id: u.user!.id, ...f });
-    if (error) return toast.error("Gagal menyimpan profil");
+    if (error) { toast.error("Gagal menyimpan profil"); return; }
     toast.success("Profil disimpan");
     qc.invalidateQueries({ queryKey: ["profile"] });
   };
 
   const gantiPw = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (pw.baru.length < 6) return toast.error("Kata sandi baru minimal 6 karakter");
+    if (pw.baru.length < 6) { toast.error("Kata sandi baru minimal 6 karakter"); return; }
     const { error } = await supabase.auth.updateUser({ password: pw.baru, current_password: pw.lama } as any);
-    if (error) return toast.error("Gagal mengganti kata sandi: " + error.message);
+    if (error) { toast.error("Gagal mengganti kata sandi: " + error.message); return; }
     toast.success("Kata sandi diganti");
     setPw({ lama: "", baru: "" });
   };

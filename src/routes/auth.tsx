@@ -30,7 +30,7 @@ function AuthPage() {
     setLoading(true);
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     setLoading(false);
-    if (error) return toast.error("Email atau kata sandi salah");
+    if (error) { toast.error("Email atau kata sandi salah"); return; }
     navigate({ to: "/dashboard" });
   };
 

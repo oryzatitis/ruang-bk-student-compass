@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { PrintKop, PrintTtd } from "@/components/PrintKop";
 
-type Row = Record<string, any>;
+type Row = any;
 const selectCls =
   "flex h-10 w-full rounded-md border border-input bg-card px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring";
 

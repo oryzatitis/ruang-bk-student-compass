@@ -16,7 +16,7 @@ function Dashboard() {
     queryKey: ["dashboard"],
     queryFn: async () => {
       const res = await Promise.all(MODULES.map((m) => supabase.from(m.table).select("id", { count: "exact", head: true })));
-      return Object.fromEntries(MODULES.map((m, i) => [m.slug, res[i].count ?? 0]));
+      return Object.fromEntries(MODULES.map((m, i) => [m.slug, res[i]?.count ?? 0]));
     },
   });
 
