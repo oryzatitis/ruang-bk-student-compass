@@ -14,6 +14,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as AturSandiRouteImport } from './routes/atur-sandi'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedImportSiswaRouteImport } from './routes/_authenticated/import-siswa'
 import { Route as AuthenticatedLaporanRouteImport } from './routes/_authenticated/laporan'
 import { Route as AuthenticatedPenggunaRouteImport } from './routes/_authenticated/pengguna'
 import { Route as AuthenticatedProfilRouteImport } from './routes/_authenticated/profil'
@@ -43,6 +44,12 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedImportSiswaRoute =
+  AuthenticatedImportSiswaRouteImport.update({
+    id: '/import-siswa',
+    path: '/import-siswa',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedLaporanRoute = AuthenticatedLaporanRouteImport.update({
   id: '/laporan',
   path: '/laporan',
@@ -69,6 +76,7 @@ export interface FileRoutesByFullPath {
   '/atur-sandi': typeof AturSandiRoute
   '/auth': typeof AuthRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/import-siswa': typeof AuthenticatedImportSiswaRoute
   '/laporan': typeof AuthenticatedLaporanRoute
   '/pengguna': typeof AuthenticatedPenggunaRoute
   '/profil': typeof AuthenticatedProfilRoute
@@ -79,6 +87,7 @@ export interface FileRoutesByTo {
   '/atur-sandi': typeof AturSandiRoute
   '/auth': typeof AuthRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/import-siswa': typeof AuthenticatedImportSiswaRoute
   '/laporan': typeof AuthenticatedLaporanRoute
   '/pengguna': typeof AuthenticatedPenggunaRoute
   '/profil': typeof AuthenticatedProfilRoute
@@ -91,6 +100,7 @@ export interface FileRoutesById {
   '/atur-sandi': typeof AturSandiRoute
   '/auth': typeof AuthRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/import-siswa': typeof AuthenticatedImportSiswaRoute
   '/_authenticated/laporan': typeof AuthenticatedLaporanRoute
   '/_authenticated/pengguna': typeof AuthenticatedPenggunaRoute
   '/_authenticated/profil': typeof AuthenticatedProfilRoute
@@ -103,6 +113,7 @@ export interface FileRouteTypes {
     | '/atur-sandi'
     | '/auth'
     | '/dashboard'
+    | '/import-siswa'
     | '/laporan'
     | '/pengguna'
     | '/profil'
@@ -113,6 +124,7 @@ export interface FileRouteTypes {
     | '/atur-sandi'
     | '/auth'
     | '/dashboard'
+    | '/import-siswa'
     | '/laporan'
     | '/pengguna'
     | '/profil'
@@ -124,6 +136,7 @@ export interface FileRouteTypes {
     | '/atur-sandi'
     | '/auth'
     | '/_authenticated/dashboard'
+    | '/_authenticated/import-siswa'
     | '/_authenticated/laporan'
     | '/_authenticated/pengguna'
     | '/_authenticated/profil'
@@ -174,6 +187,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/import-siswa': {
+      id: '/_authenticated/import-siswa'
+      path: '/import-siswa'
+      fullPath: '/import-siswa'
+      preLoaderRoute: typeof AuthenticatedImportSiswaRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/laporan': {
       id: '/_authenticated/laporan'
       path: '/laporan'
@@ -207,6 +227,7 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedImportSiswaRoute: typeof AuthenticatedImportSiswaRoute
   AuthenticatedLaporanRoute: typeof AuthenticatedLaporanRoute
   AuthenticatedPenggunaRoute: typeof AuthenticatedPenggunaRoute
   AuthenticatedProfilRoute: typeof AuthenticatedProfilRoute
@@ -215,6 +236,7 @@ interface AuthenticatedRouteRouteChildren {
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedImportSiswaRoute: AuthenticatedImportSiswaRoute,
   AuthenticatedLaporanRoute: AuthenticatedLaporanRoute,
   AuthenticatedPenggunaRoute: AuthenticatedPenggunaRoute,
   AuthenticatedProfilRoute: AuthenticatedProfilRoute,
