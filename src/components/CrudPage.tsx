@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
+import { Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Plus, Printer, Pencil, Trash2, Search, FileDown, Loader2 } from "lucide-react";
+import { Plus, Printer, Pencil, Trash2, Search, FileDown, Loader2, FileSpreadsheet } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import type { Field, ModuleDef } from "@/lib/modules";
@@ -156,7 +157,14 @@ export function CrudPage({ module: m }: { module: ModuleDef }) {
             <p className="text-sm text-muted-foreground">{m.description}</p>
           </div>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
+          {m.slug === "siswa" && (
+            <Button variant="outline" asChild>
+              <Link to="/import-siswa">
+                <FileSpreadsheet className="h-4 w-4" /> Impor Excel
+              </Link>
+            </Button>
+          )}
           <Button variant="outline" onClick={() => window.print()}>
             <Printer className="h-4 w-4" /> Cetak
           </Button>

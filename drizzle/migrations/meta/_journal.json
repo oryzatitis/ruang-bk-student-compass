@@ -15,6 +15,13 @@
       "when": 1792565581977,
       "tag": "0001_roles_admin_guru",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1792974853652,
+      "tag": "0002_create_layanan",
+      "breakpoints": true
     }
   ]
 }

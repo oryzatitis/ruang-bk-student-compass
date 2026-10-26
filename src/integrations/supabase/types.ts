@@ -244,6 +244,45 @@ export type Database = {
           },
         ]
       }
+      layanan: {
+        Row: {
+          created_at: string
+          deskripsi: string | null
+          id: string
+          jenis: string
+          judul: string
+          kategori: string
+          peserta: string | null
+          tanggal: string
+          tindak_lanjut: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          deskripsi?: string | null
+          id?: string
+          jenis?: string
+          judul: string
+          kategori?: string
+          peserta?: string | null
+          tanggal?: string
+          tindak_lanjut?: string | null
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          deskripsi?: string | null
+          id?: string
+          jenis?: string
+          judul?: string
+          kategori?: string
+          peserta?: string | null
+          tanggal?: string
+          tindak_lanjut?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       pelanggaran: {
         Row: {
           created_at: string

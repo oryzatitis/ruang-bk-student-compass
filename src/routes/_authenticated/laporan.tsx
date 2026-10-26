@@ -42,6 +42,7 @@ function Laporan() {
   const ki = data?.["konseling-individu"] ?? [];
   const kk = data?.["konseling-kelompok"] ?? [];
   const pl = data?.["pelanggaran"] ?? [];
+  const ly = data?.["layanan"] ?? [];
 
   return (
     <div>
@@ -125,6 +126,11 @@ function Laporan() {
               title="E. Daftar Pelanggaran & Pembinaan"
               rows={pl}
               cols={[["Tanggal", (r) => formatTanggal(r.tanggal)], ["Siswa", (r) => r.siswa?.nama ?? "-"], ["Kelas", (r) => r.siswa?.kelas ?? "-"], ["Pelanggaran", (r) => r.jenis], ["Poin", (r) => r.poin], ["Pembinaan", (r) => r.pembinaan], ["Status", (r) => r.status]]}
+            />
+            <DetailTable
+              title="F. Daftar Layanan (Konsultasi, Konferensi Kasus, Kolaborasi, Home Visit)"
+              rows={ly}
+              cols={[["Tanggal", (r) => formatTanggal(r.tanggal)], ["Kelompok", (r) => r.kategori], ["Jenis", (r) => r.jenis], ["Judul", (r) => r.judul], ["Pihak Terlibat", (r) => r.peserta], ["Tindak Lanjut", (r) => r.tindak_lanjut]]}
             />
           </div>
         )}
