@@ -8,6 +8,7 @@ import {
   CalendarRange,
   ListChecks,
   FolderOpen,
+  HandHeart,
   type LucideIcon,
 } from "lucide-react";
 
@@ -32,7 +33,8 @@ export type TableName =
   | "pelanggaran"
   | "program_bk"
   | "akpd"
-  | "dokumen";
+  | "dokumen"
+  | "layanan";
 
 export interface ModuleDef {
   slug: string;
@@ -48,6 +50,8 @@ export interface ModuleDef {
 
 const BIDANG = ["Pribadi", "Sosial", "Belajar", "Karier"];
 const KELAS = ["VII A", "VII B", "VII C", "VII D", "VII E", "VIII A", "VIII B", "VIII C", "VIII D", "VIII E", "IX A", "IX B", "IX C", "IX D", "IX E"];
+export const KATEGORI_LAYANAN = ["Layanan Dasar", "Layanan Responsif", "Layanan Perencanaan Individual"];
+const JENIS_LAYANAN = ["Konsultasi", "Konferensi Kasus", "Kolaborasi", "Home Visit"];
 
 export const MODULES: ModuleDef[] = [
   {
@@ -192,6 +196,25 @@ export const MODULES: ModuleDef[] = [
     ],
   },
   {
+    slug: "layanan",
+    table: "layanan",
+    title: "Layanan BK",
+    short: "Layanan BK",
+    description: "Konsultasi, konferensi kasus, kolaborasi, dan home visit.",
+    icon: HandHeart,
+    orderBy: "tanggal",
+    hasDate: true,
+    fields: [
+      { name: "tanggal", label: "Tanggal", type: "date", required: true, showInTable: true },
+      { name: "kategori", label: "Kelompok Layanan", type: "select", options: KATEGORI_LAYANAN, required: true, showInTable: true },
+      { name: "jenis", label: "Jenis Layanan", type: "select", options: JENIS_LAYANAN, required: true, showInTable: true },
+      { name: "judul", label: "Judul / Topik", type: "text", required: true, showInTable: true },
+      { name: "peserta", label: "Pihak yang Terlibat", type: "textarea", showInTable: true, placeholder: "Contoh: Wali kelas VII A, orang tua siswa" },
+      { name: "deskripsi", label: "Uraian Kegiatan", type: "textarea" },
+      { name: "tindak_lanjut", label: "Hasil & Tindak Lanjut", type: "textarea", showInTable: true },
+    ],
+  },
+  {
     slug: "dokumen",
     table: "dokumen",
     title: "Dokumen BK",
@@ -211,3 +234,16 @@ export const MODULES: ModuleDef[] = [
 ];
 
 export const getModule = (slug: string) => MODULES.find((m) => m.slug === slug);
+
+export interface ModuleGroup {
+  label: string;
+  slugs: string[];
+}
+
+export const MODULE_GROUPS: ModuleGroup[] = [
+  { label: "Data Pokok", slugs: ["siswa", "daftar-hadir"] },
+  { label: "Layanan Dasar", slugs: ["kunjungan", "akpd", "program-bk"] },
+  { label: "Layanan Responsif", slugs: ["konseling-individu", "konseling-kelompok", "pelanggaran", "layanan"] },
+  { label: "Layanan Perencanaan Individual", slugs: ["layanan"] },
+  { label: "Dokumen", slugs: ["dokumen"] },
+];
