@@ -3,7 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState, type ReactNode } from "react";
 import { LayoutDashboard, FileBarChart, UserCircle, LogOut, Menu, BookHeart, Users } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { MODULES } from "@/lib/modules";
+import { MODULES, MODULE_GROUPS, getModule } from "@/lib/modules";
 import { profileQuery, isAdminQuery } from "@/lib/data";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -19,18 +19,25 @@ function NavLinks({ onNavigate }: { onNavigate?: (() => void) | undefined }) {
       <Link to="/dashboard" className={linkCls} activeProps={{ className: activeCls }} onClick={onNavigate}>
         <LayoutDashboard className="h-4 w-4" /> Beranda
       </Link>
-      <div className="mt-3 mb-1 px-3 text-xs font-semibold uppercase tracking-wider text-sidebar-foreground/60">Kelola Data</div>
-      {MODULES.map((m) => (
-        <Link
-          key={m.slug}
-          to="/m/$modul"
-          params={{ modul: m.slug }}
-          className={linkCls}
-          activeProps={{ className: activeCls }}
-          onClick={onNavigate}
-        >
-          <m.icon className="h-4 w-4" /> {m.short}
-        </Link>
+      {MODULE_GROUPS.map((g) => (
+        <div key={g.label}>
+          <div className="mt-3 mb-1 px-3 text-xs font-semibold uppercase tracking-wider text-sidebar-foreground/60">{g.label}</div>
+          {g.slugs.map((slug) => {
+            const m = getModule(slug)!;
+            return (
+              <Link
+                key={m.slug}
+                to="/m/$modul"
+                params={{ modul: m.slug }}
+                className={linkCls}
+                activeProps={{ className: activeCls }}
+                onClick={onNavigate}
+              >
+                <m.icon className="h-4 w-4" /> {m.short}
+              </Link>
+            );
+          })}
+        </div>
       ))}
       <div className="mt-3 mb-1 px-3 text-xs font-semibold uppercase tracking-wider text-sidebar-foreground/60">Lainnya</div>
       <Link to="/laporan" className={linkCls} activeProps={{ className: activeCls }} onClick={onNavigate}>
