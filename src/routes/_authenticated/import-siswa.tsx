@@ -60,7 +60,7 @@ function ImportSiswa() {
     try {
       const buf = await f.arrayBuffer();
       const wb = XLSX.read(buf);
-      const json = XLSX.utils.sheet_to_json<Record<string, unknown>>(wb.Sheets[wb.SheetNames[0]], { defval: "" });
+      const json = XLSX.utils.sheet_to_json<Record<string, unknown>>(wb.Sheets[wb.SheetNames[0]!]!, { defval: "" });
       if (json.length === 0) {
         toast.error("File tidak berisi data. Pastikan baris pertama adalah judul kolom.");
         return;
