@@ -23,7 +23,8 @@ function NavLinks({ onNavigate }: { onNavigate?: (() => void) | undefined }) {
         <div key={g.label}>
           <div className="mt-3 mb-1 px-3 text-xs font-semibold uppercase tracking-wider text-sidebar-foreground/60">{g.label}</div>
           {g.slugs.map((slug) => {
-            const m = getModule(slug)!;
+             const m = getModule(slug);
+             if (!m) return null;
             return (
               <Link
                 key={m.slug}

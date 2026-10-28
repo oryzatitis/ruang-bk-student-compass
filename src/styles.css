@@ -134,4 +134,6 @@
     border: none !important;
     padding: 0 !important;
   }
+  .single-record { font-family: "Times New Roman", serif; }
+  .print-table tr { break-inside: avoid; }
 }
