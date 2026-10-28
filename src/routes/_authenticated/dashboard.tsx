@@ -17,7 +17,7 @@ function Dashboard() {
     queryFn: async () => {
       const res = await Promise.all(MODULES.map((m) => {
         const query = supabase.from(m.table).select("id", { count: "exact", head: true });
-        return m.category ? query.eq("kategori", m.category) : query;
+        return m.category ? supabase.from("layanan").select("id", { count: "exact", head: true }).eq("kategori", m.category) : query;
       }));
       return Object.fromEntries(MODULES.map((m, i) => [m.slug, res[i]?.count ?? 0]));
     },

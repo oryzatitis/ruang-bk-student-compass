@@ -29,7 +29,7 @@ export const moduleQuery = (m: ModuleDef) =>
       let query = supabase
         .from(m.table)
         .select(hasSiswa ? "*, siswa(nama,kelas,nisn)" : "*");
-      if (m.category) query = query.eq("kategori", m.category);
+      if (m.category) query = supabase.from("layanan").select("*").eq("kategori", m.category);
       const { data, error } = await query
         .order(m.orderBy, { ascending: m.orderBy === "nama" });
       if (error) throw error;

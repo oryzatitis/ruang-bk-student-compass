@@ -259,7 +259,7 @@ if (layanan) {
     ["layanan-dasar", "Layanan Dasar", "Asesmen & Bimbingan"],
     ["peminatan", "Layanan Peminatan dan Perencanaan Individual", "Peminatan & Pendampingan"],
     ["dukungan-sistem", "Dukungan Sistem", "Kegiatan Dukungan Sistem"],
-  ]) {
+  ] as const) {
     MODULES.push({ ...layanan, slug, category, title: category, short, description: "", fields: layanan.fields.filter((f) => f.name !== "kategori").map((f) => f.name === "jenis" ? { ...f, options: JENIS_PER_KATEGORI[category] } : f) });
   }
 }
