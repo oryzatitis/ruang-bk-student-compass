@@ -26,10 +26,14 @@ export const moduleQuery = (m: ModuleDef) =>
     queryKey: ["module", m.table, m.category ?? "all"],
     queryFn: async () => {
       const hasSiswa = m.fields.some((f) => f.type === "siswa");
-      let query = supabase
+      if (m.category) {
+        const { data, error } = await supabase.from("layanan").select("*").eq("kategori", m.category).order(m.orderBy, { ascending: false });
+        if (error) throw error;
+        return data;
+      }
+      const query = supabase
         .from(m.table)
         .select(hasSiswa ? "*, siswa(nama,kelas,nisn)" : "*");
-      if (m.category) query = supabase.from("layanan").select("*").eq("kategori", m.category);
       const { data, error } = await query
         .order(m.orderBy, { ascending: m.orderBy === "nama" });
       if (error) throw error;
