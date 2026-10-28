@@ -6,7 +6,7 @@ import { MODULES } from "@/lib/modules";
 import { profileQuery } from "@/lib/data";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
-  head: () => ({ meta: [{ title: "Beranda — RUANG BK" }] }),
+  head: () => ({ meta: [{ title: "Beranda — RUANG BK" }, { name: "description", content: "Beranda layanan dan administrasi BK SMP Negeri 3 Tempel." }, { property: "og:title", content: "Beranda — RUANG BK" }, { property: "og:description", content: "Beranda layanan dan administrasi BK SMP Negeri 3 Tempel." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
   component: Dashboard,
 });
 

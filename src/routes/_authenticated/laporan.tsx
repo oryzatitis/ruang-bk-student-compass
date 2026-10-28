@@ -11,12 +11,12 @@ import { Label } from "@/components/ui/label";
 import { PrintKop, PrintTtd } from "@/components/PrintKop";
 
 export const Route = createFileRoute("/_authenticated/laporan")({
-  head: () => ({ meta: [{ title: "Laporan BK — RUANG BK" }] }),
+  head: () => ({ meta: [{ title: "Laporan BK — RUANG BK" }, { name: "description", content: "Rekap kegiatan layanan BK per periode SMP Negeri 3 Tempel." }, { property: "og:title", content: "Laporan BK — RUANG BK" }, { property: "og:description", content: "Rekap kegiatan layanan BK per periode SMP Negeri 3 Tempel." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
   component: Laporan,
 });
 
 const BIDANG = ["Pribadi", "Sosial", "Belajar", "Karier"];
-const DATED = MODULES.filter((m) => m.hasDate && m.slug !== "dokumen");
+const DATED = MODULES.filter((m) => m.hasDate && m.slug !== "dokumen" && !m.category);
 
 function Laporan() {
   const now = new Date();
@@ -128,7 +128,7 @@ function Laporan() {
               cols={[["Tanggal", (r) => formatTanggal(r.tanggal)], ["Siswa", (r) => r.siswa?.nama ?? "-"], ["Kelas", (r) => r.siswa?.kelas ?? "-"], ["Pelanggaran", (r) => r.jenis], ["Poin", (r) => r.poin], ["Pembinaan", (r) => r.pembinaan], ["Status", (r) => r.status]]}
             />
             <DetailTable
-              title="F. Daftar Layanan (Konsultasi, Konferensi Kasus, Kolaborasi, Home Visit)"
+              title="F. Daftar Layanan dan Kegiatan Program BK"
               rows={ly}
               cols={[["Tanggal", (r) => formatTanggal(r.tanggal)], ["Kelompok", (r) => r.kategori], ["Jenis", (r) => r.jenis], ["Judul", (r) => r.judul], ["Pihak Terlibat", (r) => r.peserta], ["Tindak Lanjut", (r) => r.tindak_lanjut]]}
             />

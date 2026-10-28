@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 export const Route = createFileRoute("/_authenticated/profil")({
-  head: () => ({ meta: [{ title: "Profil Saya — RUANG BK" }] }),
+  head: () => ({ meta: [{ title: "Profil Saya — RUANG BK" }, { name: "description", content: "Profil guru dan pengaturan tanda tangan laporan RUANG BK." }, { property: "og:title", content: "Profil Saya — RUANG BK" }, { property: "og:description", content: "Profil guru dan pengaturan tanda tangan laporan RUANG BK." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
   component: Profil,
 });
 

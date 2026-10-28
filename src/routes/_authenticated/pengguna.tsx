@@ -14,7 +14,7 @@ export const Route = createFileRoute("/_authenticated/pengguna")({
     const admin = await context.queryClient.fetchQuery(isAdminQuery);
     if (!admin) throw redirect({ to: "/dashboard" });
   },
-  head: () => ({ meta: [{ title: "Kelola Pengguna — RUANG BK" }] }),
+  head: () => ({ meta: [{ title: "Kelola Pengguna — RUANG BK" }, { name: "description", content: "Pengelolaan undangan akun guru BK oleh Administrator RUANG BK." }, { property: "og:title", content: "Kelola Pengguna — RUANG BK" }, { property: "og:description", content: "Pengelolaan undangan akun guru BK oleh Administrator RUANG BK." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
   component: Pengguna,
 });
 
