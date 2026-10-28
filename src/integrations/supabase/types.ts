@@ -133,35 +133,53 @@ export type Database = {
         Row: {
           bidang: string | null
           created_at: string
+          fungsi_layanan: string | null
           hasil: string | null
           id: string
+          kelas: string | null
           masalah: string | null
+          semester: string | null
           siswa_id: string | null
+          tahun_pelajaran: string | null
           tanggal: string
+          tempat: string | null
           tindakan: string | null
           user_id: string
+          waktu: string | null
         }
         Insert: {
           bidang?: string | null
           created_at?: string
+          fungsi_layanan?: string | null
           hasil?: string | null
           id?: string
+          kelas?: string | null
           masalah?: string | null
+          semester?: string | null
           siswa_id?: string | null
+          tahun_pelajaran?: string | null
           tanggal?: string
+          tempat?: string | null
           tindakan?: string | null
           user_id?: string
+          waktu?: string | null
         }
         Update: {
           bidang?: string | null
           created_at?: string
+          fungsi_layanan?: string | null
           hasil?: string | null
           id?: string
+          kelas?: string | null
           masalah?: string | null
+          semester?: string | null
           siswa_id?: string | null
+          tahun_pelajaran?: string | null
           tanggal?: string
+          tempat?: string | null
           tindakan?: string | null
           user_id?: string
+          waktu?: string | null
         }
         Relationships: [
           {
@@ -178,31 +196,52 @@ export type Database = {
           anggota: string | null
           bidang: string | null
           created_at: string
+          fungsi_layanan: string | null
           hasil: string | null
           id: string
+          kelas: string | null
+          nama_konseli: string | null
+          semester: string | null
+          tahun_pelajaran: string | null
           tanggal: string
+          tempat: string | null
           topik: string
           user_id: string
+          waktu: string | null
         }
         Insert: {
           anggota?: string | null
           bidang?: string | null
           created_at?: string
+          fungsi_layanan?: string | null
           hasil?: string | null
           id?: string
+          kelas?: string | null
+          nama_konseli?: string | null
+          semester?: string | null
+          tahun_pelajaran?: string | null
           tanggal?: string
+          tempat?: string | null
           topik: string
           user_id?: string
+          waktu?: string | null
         }
         Update: {
           anggota?: string | null
           bidang?: string | null
           created_at?: string
+          fungsi_layanan?: string | null
           hasil?: string | null
           id?: string
+          kelas?: string | null
+          nama_konseli?: string | null
+          semester?: string | null
+          tahun_pelajaran?: string | null
           tanggal?: string
+          tempat?: string | null
           topik?: string
           user_id?: string
+          waktu?: string | null
         }
         Relationships: []
       }
@@ -332,22 +371,28 @@ export type Database = {
           created_at: string
           id: string
           kelas_binaan: string | null
+          kepala_sekolah: string
           nama: string
           nip: string | null
+          nip_kepala_sekolah: string
         }
         Insert: {
           created_at?: string
           id: string
           kelas_binaan?: string | null
+          kepala_sekolah?: string
           nama?: string
           nip?: string | null
+          nip_kepala_sekolah?: string
         }
         Update: {
           created_at?: string
           id?: string
           kelas_binaan?: string | null
+          kepala_sekolah?: string
           nama?: string
           nip?: string | null
+          nip_kepala_sekolah?: string
         }
         Relationships: []
       }
@@ -400,6 +445,7 @@ export type Database = {
           nama: string
           nama_ortu: string | null
           nis: string | null
+          nisn: string | null
           telepon: string | null
           user_id: string
         }
@@ -412,6 +458,7 @@ export type Database = {
           nama: string
           nama_ortu?: string | null
           nis?: string | null
+          nisn?: string | null
           telepon?: string | null
           user_id?: string
         }
@@ -424,6 +471,7 @@ export type Database = {
           nama?: string
           nama_ortu?: string | null
           nis?: string | null
+          nisn?: string | null
           telepon?: string | null
           user_id?: string
         }

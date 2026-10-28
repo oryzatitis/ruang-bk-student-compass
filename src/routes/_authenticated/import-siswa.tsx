@@ -9,14 +9,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 export const Route = createFileRoute("/_authenticated/import-siswa")({
-  head: () => ({ meta: [{ title: "Impor Data Siswa — RUANG BK" }] }),
+  head: () => ({ meta: [{ title: "Impor Data Siswa — RUANG BK" }, { name: "description", content: "Impor data siswa dari Excel ke RUANG BK SMP Negeri 3 Tempel." }, { property: "og:title", content: "Impor Data Siswa — RUANG BK" }, { property: "og:description", content: "Impor data siswa dari Excel ke RUANG BK SMP Negeri 3 Tempel." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
   component: ImportSiswa,
 });
 
-type Row = { nis: string; nama: string; kelas: string; jenis_kelamin: string; nama_ortu: string; telepon: string; alamat: string };
+type Row = { nis: string; nisn: string; nama: string; kelas: string; jenis_kelamin: string; nama_ortu: string; telepon: string; alamat: string };
 
 const KOLOM: [keyof Row, string][] = [
   ["nis", "NIS"],
+  ["nisn", "NISN"],
   ["nama", "Nama"],
   ["kelas", "Kelas"],
   ["jenis_kelamin", "Jenis Kelamin"],
@@ -27,7 +28,7 @@ const KOLOM: [keyof Row, string][] = [
 
 const norm = (s: string) => s.toLowerCase().replace(/[^a-z]/g, "");
 const ALIAS: Record<string, keyof Row> = {
-  nis: "nis", nisn: "nis",
+  nis: "nis", nisn: "nisn",
   nama: "nama", namalengkap: "nama", namasiswa: "nama",
   kelas: "kelas",
   jeniskelamin: "jenis_kelamin", jk: "jenis_kelamin", gender: "jenis_kelamin",
@@ -39,7 +40,7 @@ const ALIAS: Record<string, keyof Row> = {
 function unduhContoh() {
   const ws = XLSX.utils.aoa_to_sheet([
     KOLOM.map(([, label]) => label),
-    ["12345", "Contoh Nama Siswa", "VII A", "Laki-laki", "Nama Orang Tua", "081234567890", "Tempel, Sleman"],
+    ["12345", "0012345678", "Contoh Nama Siswa", "VII A", "Laki-laki", "Nama Orang Tua", "081234567890", "Tempel, Sleman"],
   ]);
   ws["!cols"] = KOLOM.map(() => ({ wch: 20 }));
   const wb = XLSX.utils.book_new();
@@ -60,13 +61,16 @@ function ImportSiswa() {
     try {
       const buf = await f.arrayBuffer();
       const wb = XLSX.read(buf);
-      const json = XLSX.utils.sheet_to_json<Record<string, unknown>>(wb.Sheets[wb.SheetNames[0]!]!, { defval: "" });
+      const first = wb.SheetNames[0];
+      const sheet = first ? wb.Sheets[first] : undefined;
+      if (!sheet) throw new Error("Tidak ada lembar data");
+      const json = XLSX.utils.sheet_to_json<Record<string, unknown>>(sheet, { defval: "", raw: false });
       if (json.length === 0) {
         toast.error("File tidak berisi data. Pastikan baris pertama adalah judul kolom.");
         return;
       }
       const hasil: Row[] = json.map((r) => {
-        const out: Row = { nis: "", nama: "", kelas: "", jenis_kelamin: "", nama_ortu: "", telepon: "", alamat: "" };
+        const out: Row = { nis: "", nisn: "", nama: "", kelas: "", jenis_kelamin: "", nama_ortu: "", telepon: "", alamat: "" };
         for (const [k, v] of Object.entries(r)) {
           const target = ALIAS[norm(k)];
           if (target) out[target] = String(v ?? "").trim();
@@ -129,7 +133,7 @@ function ImportSiswa() {
       <div className="mb-4 grid gap-3 rounded-xl border bg-card p-4">
         <p className="text-sm">
           <b>Langkah 1.</b> Unduh file contoh agar susunan kolomnya benar, atau gunakan file Anda sendiri dengan judul kolom:{" "}
-          <b>NIS, Nama, Kelas, Jenis Kelamin, Nama Orang Tua, No. HP Orang Tua, Alamat</b>.
+          <b>NIS, NISN, Nama, Kelas, Jenis Kelamin, Nama Orang Tua, No. HP Orang Tua, Alamat</b>.
         </p>
         <p className="text-sm">
           <b>Langkah 2.</b> Pilih file Excel (.xlsx / .xls), lalu periksa data yang terbaca di bawah.

@@ -1,10 +1,13 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { flushSync } from "react-dom";
 import { Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Plus, Printer, Pencil, Trash2, Search, FileDown, Loader2, FileSpreadsheet } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import type { Field, ModuleDef } from "@/lib/modules";
+import { JENIS_PER_KATEGORI } from "@/lib/modules";
+import { RecordPrint } from "@/components/RecordPrint";
 import { formatTanggal, moduleQuery, siswaListQuery } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -62,6 +65,16 @@ export function CrudPage({ module: m }: { module: ModuleDef }) {
   const [form, setForm] = useState<Row>({});
   const [file, setFile] = useState<File | null>(null);
   const [toDelete, setToDelete] = useState<Row | null>(null);
+  const [printRow, setPrintRow] = useState<Row | null>(null);
+  useEffect(() => {
+    const done = () => setPrintRow(null);
+    window.addEventListener("afterprint", done);
+    return () => window.removeEventListener("afterprint", done);
+  }, []);
+  const printRecord = (row: Row | null) => {
+    flushSync(() => setPrintRow(row));
+    window.print();
+  };
 
   const tableFields = m.fields.filter((f) => f.showInTable);
 
@@ -102,6 +115,7 @@ export function CrudPage({ module: m }: { module: ModuleDef }) {
         if (f.required && f.type !== "file" && !String(form[f.name] ?? "").trim()) throw new Error(`${f.label} wajib diisi`);
       }
       const payload: Row = { ...form };
+      if (m.category) payload.kategori = m.category;
       for (const f of m.fields) {
         if (f.type === "number") payload[f.name] = Number(payload[f.name] || 0);
         if (f.type === "siswa" && !payload[f.name]) payload[f.name] = null;
@@ -109,7 +123,8 @@ export function CrudPage({ module: m }: { module: ModuleDef }) {
       const fileField = m.fields.find((f) => f.type === "file");
       if (fileField && file) {
         const { data: u } = await supabase.auth.getUser();
-        const path = `${u.user!.id}/${Date.now()}-${file.name.replace(/[^\w.\-]/g, "_")}`;
+        if (!u.user) throw new Error("Silakan masuk kembali");
+        const path = `${u.user.id}/${Date.now()}-${file.name.replace(/[^\w.\-]/g, "_")}`;
         const { error } = await supabase.storage.from("dokumen-bk").upload(path, file);
         if (error) throw new Error("Gagal mengunggah berkas");
         payload[fileField.name] = path;
@@ -165,7 +180,7 @@ export function CrudPage({ module: m }: { module: ModuleDef }) {
               </Link>
             </Button>
           )}
-          <Button variant="outline" onClick={() => window.print()}>
+          <Button variant="outline" onClick={() => printRecord(null)}>
             <Printer className="h-4 w-4" /> Cetak
           </Button>
           <Button onClick={openNew}>
@@ -193,7 +208,7 @@ export function CrudPage({ module: m }: { module: ModuleDef }) {
         )}
       </div>
 
-      <div className="print-area rounded-xl border bg-card">
+      <div className={`print-area rounded-xl border bg-card ${printRow ? "no-print" : ""}`}>
         <PrintKop title={m.title} subtitle={periode} />
         {isLoading ? (
           <div className="flex justify-center p-10 text-muted-foreground">
@@ -216,6 +231,7 @@ export function CrudPage({ module: m }: { module: ModuleDef }) {
                     </div>
                   ))}
                   <div className="mt-3 flex gap-2">
+                    <Button size="sm" variant="outline" onClick={() => printRecord(r)}><Printer className="h-3.5 w-3.5" /> Cetak</Button>
                     <Button size="sm" variant="outline" onClick={() => openEdit(r)}>
                       <Pencil className="h-3.5 w-3.5" /> Ubah
                     </Button>
@@ -251,6 +267,7 @@ export function CrudPage({ module: m }: { module: ModuleDef }) {
                         </td>
                       ))}
                       <td className="no-print whitespace-nowrap px-3 py-3 text-right">
+                        <Button size="icon" variant="ghost" onClick={() => printRecord(r)} aria-label="Cetak catatan" title="Cetak catatan"><Printer className="h-4 w-4" /></Button>
                         <Button size="icon" variant="ghost" onClick={() => openEdit(r)} aria-label="Ubah">
                           <Pencil className="h-4 w-4" />
                         </Button>
@@ -267,6 +284,7 @@ export function CrudPage({ module: m }: { module: ModuleDef }) {
         )}
         <PrintTtd />
       </div>
+      {printRow && <RecordPrint module={m} row={printRow} />}
       <p className="no-print mt-3 text-xs text-muted-foreground">Jumlah data: {filtered.length}</p>
 
       <Dialog open={!!editing} onOpenChange={(o) => !o && setEditing(null)}>
@@ -289,14 +307,14 @@ export function CrudPage({ module: m }: { module: ModuleDef }) {
                 {f.type === "textarea" ? (
                   <Textarea id={f.name} rows={3} placeholder={f.placeholder} value={form[f.name] ?? ""} onChange={(e) => setForm({ ...form, [f.name]: e.target.value })} />
                 ) : f.type === "select" ? (
-                  <select id={f.name} className={selectCls} value={form[f.name] ?? ""} onChange={(e) => setForm({ ...form, [f.name]: e.target.value })}>
-                    {f.options!.map((o) => (
+                  <select id={f.name} className={selectCls} value={form[f.name] ?? ""} onChange={(e) => setForm({ ...form, [f.name]: e.target.value, ...(f.name === "kategori" ? { jenis: JENIS_PER_KATEGORI[e.target.value]?.[0] ?? "" } : {}) })}>
+                    {[...new Set([...(f.name === "jenis" && form.kategori ? JENIS_PER_KATEGORI[form.kategori] ?? f.options ?? [] : f.options ?? []), ...(form[f.name] ? [form[f.name]] : [])])].map((o) => (
                       <option key={o}>{o}</option>
                     ))}
                   </select>
                 ) : f.type === "siswa" ? (
                   <>
-                    <select id={f.name} className={selectCls} value={form[f.name] ?? ""} onChange={(e) => setForm({ ...form, [f.name]: e.target.value })}>
+                    <select id={f.name} className={selectCls} value={form[f.name] ?? ""} onChange={(e) => setForm({ ...form, [f.name]: e.target.value, ...(m.slug === "konseling-individu" ? { kelas: siswa.find((s) => s.id === e.target.value)?.kelas ?? "" } : {}) })}>
                       <option value="">— Pilih siswa —</option>
                       {siswa.map((s) => (
                         <option key={s.id} value={s.id}>

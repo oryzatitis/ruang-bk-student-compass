@@ -6,7 +6,7 @@ import { MODULES } from "@/lib/modules";
 import { profileQuery } from "@/lib/data";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
-  head: () => ({ meta: [{ title: "Beranda — RUANG BK" }] }),
+  head: () => ({ meta: [{ title: "Beranda — RUANG BK" }, { name: "description", content: "Beranda layanan dan administrasi BK SMP Negeri 3 Tempel." }, { property: "og:title", content: "Beranda — RUANG BK" }, { property: "og:description", content: "Beranda layanan dan administrasi BK SMP Negeri 3 Tempel." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
   component: Dashboard,
 });
 
@@ -15,7 +15,10 @@ function Dashboard() {
   const { data: counts } = useQuery({
     queryKey: ["dashboard"],
     queryFn: async () => {
-      const res = await Promise.all(MODULES.map((m) => supabase.from(m.table).select("id", { count: "exact", head: true })));
+      const res = await Promise.all(MODULES.map((m) => {
+        const query = supabase.from(m.table).select("id", { count: "exact", head: true });
+        return m.category ? supabase.from("layanan").select("id", { count: "exact", head: true }).eq("kategori", m.category) : query;
+      }));
       return Object.fromEntries(MODULES.map((m, i) => [m.slug, res[i]?.count ?? 0]));
     },
   });

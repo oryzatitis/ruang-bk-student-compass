@@ -14,5 +14,6 @@
 - Data access uses the browser Supabase client with per-user RLS (`user_id = auth.uid()`); no server functions needed for CRUD.
 - Printing uses `window.print()` with `.no-print`/`.print-only` classes and `PrintKop`/`PrintTtd` components.
 - Roles live in `public.user_roles` (read-only to clients, checked via `has_role`); admin-only account actions run in `src/lib/users.functions.ts` server functions that verify the admin role before using the service-role client.
-- Sidebar groups modules via `MODULE_GROUPS` in `src/lib/modules.ts` (layanan dasar/responsif/perencanaan individual); a module can appear in more than one group.
+- Sidebar groups modules via `MODULE_GROUPS`; program component views share the layanan table and filter by ModuleDef.category, so records are not duplicated and old records remain accessible in the general layanan view.
+- PrintKop and PrintTtd are shared by bulk and single-record printing; RecordPrint puts student identity above the report, and each teacher's profile stores their editable principal signature settings to retain owner-only access.
 - Excel import of siswa lives in `src/routes/_authenticated/import-siswa.tsx` using the `xlsx` package: parse client-side, preview, then bulk insert via the browser client.

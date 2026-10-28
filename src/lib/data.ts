@@ -8,7 +8,7 @@ export const profileQuery = queryOptions({
     const { data: u } = await supabase.auth.getUser();
     if (!u.user) return null;
     const { data } = await supabase.from("profiles").select("*").eq("id", u.user.id).maybeSingle();
-    return { email: u.user.email ?? "", nama: data?.nama ?? "", nip: data?.nip ?? "", kelas_binaan: data?.kelas_binaan ?? "" };
+    return { email: u.user.email ?? "", nama: data?.nama ?? "", nip: data?.nip ?? "", kelas_binaan: data?.kelas_binaan ?? "", kepala_sekolah: data?.kepala_sekolah ?? "Mulasih, S.Pd.", nip_kepala_sekolah: data?.nip_kepala_sekolah ?? "19740301 200501 2 009" };
   },
 });
 
@@ -23,12 +23,18 @@ export const siswaListQuery = queryOptions({
 
 export const moduleQuery = (m: ModuleDef) =>
   queryOptions({
-    queryKey: ["module", m.table],
+    queryKey: ["module", m.table, m.category ?? "all"],
     queryFn: async () => {
       const hasSiswa = m.fields.some((f) => f.type === "siswa");
-      const { data, error } = await supabase
+      if (m.category) {
+        const { data, error } = await supabase.from("layanan").select("*").eq("kategori", m.category).order(m.orderBy, { ascending: false });
+        if (error) throw error;
+        return data;
+      }
+      const query = supabase
         .from(m.table)
-        .select(hasSiswa ? "*, siswa(nama,kelas)" : "*")
+        .select(hasSiswa ? "*, siswa(nama,kelas,nisn)" : "*");
+      const { data, error } = await query
         .order(m.orderBy, { ascending: m.orderBy === "nama" });
       if (error) throw error;
       return data as unknown as any[];

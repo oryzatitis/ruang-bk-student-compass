@@ -6,6 +6,8 @@ import { MODULES } from "@/lib/modules";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { title: "RUANG BK — SMP Negeri 3 Tempel" },
       { name: "description", content: "Aplikasi pengelolaan layanan Bimbingan dan Konseling SMP Negeri 3 Tempel." },
       { property: "og:title", content: "RUANG BK — SMP Negeri 3 Tempel" },

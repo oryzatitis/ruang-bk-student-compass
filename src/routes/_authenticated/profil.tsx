@@ -9,24 +9,25 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 export const Route = createFileRoute("/_authenticated/profil")({
-  head: () => ({ meta: [{ title: "Profil Saya — RUANG BK" }] }),
+  head: () => ({ meta: [{ title: "Profil Saya — RUANG BK" }, { name: "description", content: "Profil guru dan pengaturan tanda tangan laporan RUANG BK." }, { property: "og:title", content: "Profil Saya — RUANG BK" }, { property: "og:description", content: "Profil guru dan pengaturan tanda tangan laporan RUANG BK." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
   component: Profil,
 });
 
 function Profil() {
   const qc = useQueryClient();
   const { data } = useQuery(profileQuery);
-  const [f, setF] = useState({ nama: "", nip: "", kelas_binaan: "" });
+  const [f, setF] = useState({ nama: "", nip: "", kelas_binaan: "", kepala_sekolah: "Mulasih, S.Pd.", nip_kepala_sekolah: "19740301 200501 2 009" });
   const [pw, setPw] = useState({ lama: "", baru: "" });
 
   useEffect(() => {
-    if (data) setF({ nama: data.nama, nip: data.nip, kelas_binaan: data.kelas_binaan });
+    if (data) setF({ nama: data.nama, nip: data.nip, kelas_binaan: data.kelas_binaan, kepala_sekolah: data.kepala_sekolah, nip_kepala_sekolah: data.nip_kepala_sekolah });
   }, [data]);
 
   const simpan = async (e: React.FormEvent) => {
     e.preventDefault();
     const { data: u } = await supabase.auth.getUser();
-    const { error } = await supabase.from("profiles").upsert({ id: u.user!.id, ...f });
+    if (!u.user) { toast.error("Silakan masuk kembali"); return; }
+    const { error } = await supabase.from("profiles").upsert({ id: u.user.id, ...f });
     if (error) { toast.error("Gagal menyimpan profil"); return; }
     toast.success("Profil disimpan");
     qc.invalidateQueries({ queryKey: ["profile"] });
@@ -59,6 +60,10 @@ function Profil() {
           <Input placeholder="Contoh: VII A – VII D" value={f.kelas_binaan} onChange={(e) => setF({ ...f, kelas_binaan: e.target.value })} />
         </div>
         <Button type="submit">Simpan Profil</Button>
+        <h2 className="mt-2 font-semibold">Tanda Tangan Kepala Sekolah</h2>
+        <div className="grid gap-1.5"><Label htmlFor="kepala_sekolah">Nama Kepala Sekolah</Label><Input id="kepala_sekolah" value={f.kepala_sekolah} onChange={(e) => setF({ ...f, kepala_sekolah: e.target.value })} /></div>
+        <div className="grid gap-1.5"><Label htmlFor="nip_kepala_sekolah">NIP Kepala Sekolah</Label><Input id="nip_kepala_sekolah" value={f.nip_kepala_sekolah} onChange={(e) => setF({ ...f, nip_kepala_sekolah: e.target.value })} /></div>
+        <Button type="submit">Simpan Pengaturan Cetak</Button>
       </form>
       <form onSubmit={gantiPw} className="grid gap-4 rounded-xl border bg-card p-6">
         <h2 className="font-semibold">Ganti Kata Sandi</h2>

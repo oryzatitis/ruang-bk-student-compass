@@ -12,7 +12,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 
-export type FieldType = "text" | "textarea" | "date" | "number" | "select" | "siswa" | "file";
+export type FieldType = "text" | "textarea" | "date" | "time" | "number" | "select" | "siswa" | "file";
 
 export interface Field {
   name: string;
@@ -46,12 +46,28 @@ export interface ModuleDef {
   fields: Field[];
   orderBy: string;
   hasDate: boolean;
+  category?: string;
 }
 
 const BIDANG = ["Pribadi", "Sosial", "Belajar", "Karier"];
 const KELAS = ["VII A", "VII B", "VII C", "VII D", "VII E", "VIII A", "VIII B", "VIII C", "VIII D", "VIII E", "IX A", "IX B", "IX C", "IX D", "IX E"];
-export const KATEGORI_LAYANAN = ["Layanan Dasar", "Layanan Responsif", "Layanan Perencanaan Individual"];
-const JENIS_LAYANAN = ["Konsultasi", "Konferensi Kasus", "Kolaborasi", "Home Visit"];
+export const KATEGORI_LAYANAN = ["Layanan Dasar", "Layanan Peminatan dan Perencanaan Individual", "Layanan Responsif", "Dukungan Sistem"];
+export const FUNGSI_LAYANAN = ["Pemahaman", "Fasilitasi", "Penyesuaian", "Penyaluran", "Adaptasi", "Pencegahan"];
+export const JENIS_PER_KATEGORI: Record<string, string[]> = {
+  "Layanan Dasar": ["Pedoman Wawancara", "Pedoman Observasi", "Angket Sosiometri", "Daftar Hadir Peserta Didik/Konseli", "Leger", "Inventori Tugas-tugas Perkembangan (ITP)", "Psikotes", "Alat Ungkap Masalah (AUM)", "Bimbingan Klasikal", "Bimbingan Kelompok", "Pengelolaan Media Informasi", "Layanan Bimbingan dan Konseling Lainnya"],
+  "Layanan Peminatan dan Perencanaan Individual": ["Informasi Program Peminatan", "Pemetaan Peminatan — Pengumpulan Data", "Pemetaan Peminatan — Analisis Data", "Pemetaan Peminatan — Interpretasi Hasil", "Penetapan Peminatan Peserta Didik", "Layanan Lintas Minat", "Layanan Pendalaman Minat", "Layanan Pindah Minat", "Pendampingan — Bimbingan Klasikal", "Pendampingan — Bimbingan Kelompok", "Pendampingan — Konseling Individual", "Pendampingan — Konseling Kelompok", "Pendampingan — Konsultasi", "Pengembangan dan Penyaluran", "Evaluasi dan Tindak Lanjut"],
+  "Layanan Responsif": ["Konseling Individual", "Konseling Kelompok", "Konsultasi", "Konferensi Kasus", "Kolaborasi", "Home Visit", "Alih Tangan Kasus (Referral)"],
+  "Dukungan Sistem": ["Konsultasi", "Program Kerjasama", "Perencanaan dan Pelaksanaan Kegiatan Satuan Pendidikan", "Penelitian dan Pengembangan"],
+};
+const JENIS_LAYANAN = [...new Set(Object.values(JENIS_PER_KATEGORI).flat())];
+const SESSION_FIELDS: Field[] = [
+  { name: "kelas", label: "Kelas", type: "text", showInTable: true },
+  { name: "waktu", label: "Waktu", type: "time" },
+  { name: "tempat", label: "Tempat", type: "text" },
+  { name: "fungsi_layanan", label: "Fungsi Layanan BK", type: "select", options: FUNGSI_LAYANAN },
+  { name: "semester", label: "Semester", type: "select", options: ["1", "2"] },
+  { name: "tahun_pelajaran", label: "Tahun Pelajaran", type: "text", placeholder: "2026/2027" },
+];
 
 export const MODULES: ModuleDef[] = [
   {
@@ -65,6 +81,7 @@ export const MODULES: ModuleDef[] = [
     hasDate: false,
     fields: [
       { name: "nis", label: "NIS", type: "text", showInTable: true },
+      { name: "nisn", label: "NISN", type: "text", showInTable: true },
       { name: "nama", label: "Nama Lengkap", type: "text", required: true, showInTable: true },
       { name: "kelas", label: "Kelas", type: "select", options: KELAS, showInTable: true },
       { name: "jenis_kelamin", label: "Jenis Kelamin", type: "select", options: ["Laki-laki", "Perempuan"], showInTable: true },
@@ -116,8 +133,9 @@ export const MODULES: ModuleDef[] = [
     orderBy: "tanggal",
     hasDate: true,
     fields: [
-      { name: "tanggal", label: "Tanggal", type: "date", required: true, showInTable: true },
-      { name: "siswa_id", label: "Siswa", type: "siswa", required: true, showInTable: true },
+      { name: "tanggal", label: "Hari / Tanggal", type: "date", required: true, showInTable: true },
+      { name: "siswa_id", label: "Nama Konseli", type: "siswa", required: true, showInTable: true },
+      ...SESSION_FIELDS,
       { name: "bidang", label: "Bidang Layanan", type: "select", options: BIDANG, showInTable: true },
       { name: "masalah", label: "Permasalahan", type: "textarea", showInTable: true },
       { name: "tindakan", label: "Tindakan / Pendekatan", type: "textarea" },
@@ -134,7 +152,9 @@ export const MODULES: ModuleDef[] = [
     orderBy: "tanggal",
     hasDate: true,
     fields: [
-      { name: "tanggal", label: "Tanggal", type: "date", required: true, showInTable: true },
+      { name: "tanggal", label: "Hari / Tanggal", type: "date", required: true, showInTable: true },
+      { name: "nama_konseli", label: "Nama Konseli", type: "textarea", showInTable: true },
+      ...SESSION_FIELDS,
       { name: "topik", label: "Topik / Masalah", type: "text", required: true, showInTable: true },
       { name: "bidang", label: "Bidang Layanan", type: "select", options: BIDANG, showInTable: true },
       { name: "anggota", label: "Anggota Kelompok", type: "textarea", showInTable: true, placeholder: "Tulis nama siswa, pisahkan dengan koma" },
@@ -233,6 +253,16 @@ export const MODULES: ModuleDef[] = [
   },
 ];
 
+const layanan = MODULES.find((m) => m.slug === "layanan");
+if (layanan) {
+  for (const [slug, category, short] of [
+    ["layanan-dasar", "Layanan Dasar", "Asesmen & Bimbingan"],
+    ["peminatan", "Layanan Peminatan dan Perencanaan Individual", "Peminatan & Pendampingan"],
+    ["dukungan-sistem", "Dukungan Sistem", "Kegiatan Dukungan Sistem"],
+  ] as const) {
+    MODULES.push({ ...layanan, slug, category, title: category, short, description: "", fields: layanan.fields.filter((f) => f.name !== "kategori").map((f) => f.name === "jenis" ? { ...f, options: JENIS_PER_KATEGORI[category] ?? [] } : f) });
+  }
+}
 export const getModule = (slug: string) => MODULES.find((m) => m.slug === slug);
 
 export interface ModuleGroup {
@@ -242,8 +272,8 @@ export interface ModuleGroup {
 
 export const MODULE_GROUPS: ModuleGroup[] = [
   { label: "Data Pokok", slugs: ["siswa", "daftar-hadir"] },
-  { label: "Layanan Dasar", slugs: ["kunjungan", "akpd", "program-bk"] },
+  { label: "Layanan Dasar", slugs: ["akpd", "layanan-dasar"] },
   { label: "Layanan Responsif", slugs: ["konseling-individu", "konseling-kelompok", "pelanggaran", "layanan"] },
-  { label: "Layanan Perencanaan Individual", slugs: ["layanan"] },
-  { label: "Dokumen", slugs: ["dokumen"] },
+  { label: "Layanan Peminatan dan Perencanaan Individual", slugs: ["peminatan"] },
+  { label: "Dukungan Sistem", slugs: ["dukungan-sistem", "program-bk", "kunjungan", "dokumen"] },
 ];
