@@ -25,9 +25,14 @@ function Profil() {
 
   const simpan = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!data) return;
     const { data: u } = await supabase.auth.getUser();
     if (!u.user) { toast.error("Silakan masuk kembali"); return; }
-    const { error } = await supabase.from("profiles").upsert({ id: u.user.id, ...f });
+    const submitter = (e.nativeEvent as SubmitEvent).submitter;
+    const payload = submitter?.getAttribute("name") === "cetak"
+      ? { kepala_sekolah: f.kepala_sekolah, nip_kepala_sekolah: f.nip_kepala_sekolah }
+      : { nama: f.nama, nip: f.nip, kelas_binaan: f.kelas_binaan };
+    const { error } = await supabase.from("profiles").update(payload).eq("id", u.user.id);
     if (error) { toast.error("Gagal menyimpan profil"); return; }
     toast.success("Profil disimpan");
     qc.invalidateQueries({ queryKey: ["profile"] });
@@ -59,11 +64,11 @@ function Profil() {
           <Label>Kelas Binaan</Label>
           <Input placeholder="Contoh: VII A – VII D" value={f.kelas_binaan} onChange={(e) => setF({ ...f, kelas_binaan: e.target.value })} />
         </div>
-        <Button type="submit">Simpan Profil</Button>
+        <Button type="submit" disabled={!data}>Simpan Profil</Button>
         <h2 className="mt-2 font-semibold">Tanda Tangan Kepala Sekolah</h2>
         <div className="grid gap-1.5"><Label htmlFor="kepala_sekolah">Nama Kepala Sekolah</Label><Input id="kepala_sekolah" value={f.kepala_sekolah} onChange={(e) => setF({ ...f, kepala_sekolah: e.target.value })} /></div>
         <div className="grid gap-1.5"><Label htmlFor="nip_kepala_sekolah">NIP Kepala Sekolah</Label><Input id="nip_kepala_sekolah" value={f.nip_kepala_sekolah} onChange={(e) => setF({ ...f, nip_kepala_sekolah: e.target.value })} /></div>
-        <Button type="submit">Simpan Pengaturan Cetak</Button>
+        <Button type="submit" name="cetak" disabled={!data}>Simpan Pengaturan Cetak</Button>
       </form>
       <form onSubmit={gantiPw} className="grid gap-4 rounded-xl border bg-card p-6">
         <h2 className="font-semibold">Ganti Kata Sandi</h2>
